@@ -12,7 +12,7 @@
       <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span> ABC </span></a>
+              <a href="home.jsp" class="site_title"><i class="fa fa-paw"></i> <span> ABC </span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -38,7 +38,7 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="base.jsp">Dashboard2</a></li>
+                      <li><a href="home.jsp">지역 정보</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> 합격 <span class="fa fa-chevron-down"></span></a>
@@ -63,9 +63,9 @@
                       <li><a href="GraphPageP.jsp"> 스펙 비교 </a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-clone"></i> 기본페이지 <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-clone"></i> 자격 정보 <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="base.jsp"> 베이스 </a></li>
+                      <li><a href="base.jsp"> 자격증 </a></li>
                     </ul>
                   </li>
                 </ul>
