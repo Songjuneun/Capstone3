@@ -159,6 +159,7 @@
 	            		<center>
 	                    <thead>
 	                        <tr role="row">
+	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" >..</th>
 	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 189px;">기업명</th>
 	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 310px;">연도</th>
 	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">분야</th>
@@ -174,6 +175,7 @@
 										int year = rs1.getInt("pass_year");
 								%>                   
 	                      	<tr role="row" class="even">			<!-- gno같을경우 하나만 나오게 만들기 -->
+	                      	  <td><input type="checkbox" name="toss_Value" value="L1"></td>
 	                          <td class="sorting_1"> <%=company %> </td>
 	                          <td>	<!------- page, 목록 번호(pass_num), encoded_key(fhrmdls) ------->
 	                          		<a href = "PassContent.jsp?CurrentPage=<%=CurrentPage%>&search_Input=<%=encoded_search %>&company=<%=company%>&dept=<%=dept%>&gno=<%=gno%>">
@@ -195,6 +197,9 @@
                     	<!-- 페이지 넘버 -->
                     	<div class="row">
                     	<div class="col-sm-7">
+                    	<button type="button" class="btn btn-dark"> 추가 </button>
+                    	<button type="button" class="btn btn-dark"> 수정 </button>
+                    	<button type="button" class="btn btn-default"> 삭제</button>
 	                    	<div class="dataTables_paginate paging_simple_numbers" id="datatable-fixed-header_paginate">
 		                    	<ul class="pagination">
 		                    		
