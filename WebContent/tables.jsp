@@ -93,7 +93,7 @@
 				<div class="">
 					<div class="page-title">
 						<div class="title_left">
-							<h3>자소서 작성</h3>
+							<h3></h3>
 						</div>
 
 						<div class="title_right">
