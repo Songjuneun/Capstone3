@@ -33,6 +33,63 @@
     <!-- Custom Theme Style -->
     <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
 
+<!-- 내용추가 -->
+	<script>
+		var arrInput = new Array(0);
+		var arrInputValue = new Array(0);
+		 
+		function addInput() {
+		  arrInput.push(arrInput.length);
+		  arrInputValue.push("");
+		  display();
+		}
+		 
+		function display() {
+		  document.getElementById('here').innerHTML="";
+		  for (intI=0;intI<arrInput.length;intI++) {
+		    document.getElementById('here').innerHTML+=createInput(arrInput[intI], arrInputValue[intI]);
+		  }
+		}
+		 
+		function saveValue(intId,strValue) {
+		  arrInputValue[intId]=strValue;
+		  	  
+		}  
+		 
+		function createInput(id,value) {
+			
+			var titile;
+			var line;
+			
+			if(id%2 == 0){
+				title = "질문";
+				line = 2;
+			}
+			else {
+				title = "내용";
+				line = 10;
+			}
+			
+			return  "<br><div class='form-group' >" +
+						"<label  class='control-label col-md-3 col-sm-3 col-xs-12'>"+ title + "<span  class='required'>*</span></label>" +
+						"<div class='col-md-9 col-sm-9 col-xs-12'>" +
+							"<textarea class='form-control' rows=" + line + " id='text" + id + "' onChange='javascript:saveValue(" + id + ",this.value)' value='" + value + "'></textarea>" +
+						"</div>" +
+					"</div>" +
+					"<div class='col-md-9 col-sm-9 col-xs-12 col-md-offset-3'>" +
+				       	"<button  class='btn btn-dark'  onclick='deleteInput();'> 삭제</button>" +
+					"</div>"
+					;}
+		 
+		function deleteInput() {
+		  if (arrInput.length > 0) { 
+		     arrInput.pop(); 
+		     arrInputValue.pop();
+		  }
+		  display(); 
+		}
+	</script>
+
   </head>
 
   <body class="nav-md">
@@ -68,13 +125,76 @@
             <div class="clearfix"></div>
 
             <!-- ------------------------------------양식 삽입------------------------------------------------- -->
-       야야야양
-            
-            야야양
+       			<div class="x_panel">
+				<div class="x_title">
+					<h2> <small></small></h2>
+					<ul class="nav navbar-right panel_toolbox">
+						<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+							<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Settings 1</a>
+							</li>
+							<li><a href="#">Settings 2</a>
+							 </li>
+							</ul>
+						</li>
+						<li><a class="close-link"><i class="fa fa-close"></i></a></li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<br>
+					<form class="form-horizontal form-label-left">
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">연도</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+								<input type="text" name = "yearContent" class="form-control" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">기업명</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+								<input type="text" name = "companyContent" class="form-control" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">분야</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+								<input type="text" name="deptContent" class="form-control">
+							</div>
+						</div>
+						<div class="form-group" >
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">질문<span class="required">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+							<textarea class="form-control" name = "qContent" rows="2" placeholder="rows=&quot;3&quot;"></textarea>
+							</div>
+						</div>
+						<div class="form-group" >
+							<label class="control-label col-md-3 col-sm-3 col-xs-12">내용<span class="required">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+							<textarea class="form-control" rows="10" name="aContent" placeholder="rows=&quot;10&quot;"></textarea>
+							</div>
+						</div>
+						
+						<div id="here"></div>
+						
+					</form>
+					
+					<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+						<button  class="btn btn-default"  onclick="addInput()"> 내용추가 </button>
+						<button  class="btn btn-dark"> 확인 </button>
+                    	<button  class="btn btn-dark" onClick="javascript:location.replace('PassList_copy.jsp')"> 취소</button>
+					</div>
+					
+				</div>
+				</div>
             <!-- 양식 끝/// -->
             
           </div>
-        </div>
+        </div> 
         <!-- /page content -->
 
         <!-- footer content -->
