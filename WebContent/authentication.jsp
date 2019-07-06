@@ -53,7 +53,7 @@
 			
 			if( dbUser.equals(id) && dbPass.equals(pw) ) {
 				session.setAttribute("signedUser", id);	
-				redirectURL = "base.jsp";	
+				redirectURL = "./Admin/base.jsp";	
 				
 			}
 		} 

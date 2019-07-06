@@ -49,16 +49,16 @@
     <title> 취업 </title>
 
     <!-- Bootstrap -->
-    <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="../Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Dropzone.js -->
-    <link href="./Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
+    <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">	
@@ -142,18 +142,18 @@
     </div>
 
     <!-- jQuery -->
-    <script src="./Resources/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="../Resources/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="./Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="./Resources/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="../Resources/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="./Resources/vendors/nprogress/nprogress.js"></script>
+    <script src="../Resources/vendors/nprogress/nprogress.js"></script>
     <!-- Dropzone.js -->
-    <script src="./Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <script src="../Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="./Resources/build/js/custom.min.js"></script>
+    <script src="../Resources/build/js/custom.min.js"></script>
 
 <%
 	} catch(SQLException e) {

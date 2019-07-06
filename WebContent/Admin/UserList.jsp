@@ -8,15 +8,6 @@
 	if(session.getAttribute("signedUser") == null) { 
 		response.sendRedirect("logout.jsp");
 	}
-	
-	String search_Input = request.getParameter("search_Input");
-	String encoded_search = "";
-	if (search_Input != null) {
-	    encoded_search = URLEncoder.encode(search_Input,"utf-8");
-	} else {
-	    search_Input ="";
-	}	
-
 
 	//---------------------- 페이지의 크기와 페이지 집합의 크기 지정
 	int TotalRecord = 0;
@@ -25,8 +16,8 @@
 	int CurrentPageSet = 0;	// 현재 페이지 집합
 	int CurrentPage=0;	// 현재 페이지
 	
-	int PageRecord = 10;	//한 페이지에 띄워지는 목록 수
-	int PageSet = 5;		//한 집합의 페이지 수
+	int PageRecord = 3;	//한 페이지에 띄워지는 목록 수
+	int PageSet = 2;		//한 집합의 페이지 수
 	
 	//----------페이지 번호 전달이 없을 경우 페이지 번호의 지정
 	if( request.getParameter("CurrentPage") == null ) {
@@ -55,13 +46,8 @@
 		
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 		
-		if (search_Input.equals("")){
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from infoinfo";
-		} else {
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from infoinfo  where pass_company like '%" + search_Input + "%'";
-		}
+		query1 = "select userId, userDept, userScore, userToeic, userToss, userOpic, userAwards, userIntern, userOverseas, userVolunteer, userCertificate from userInfo limit " + FirstRecord + ", " + PageRecord;
+		query2 = "select count(userId) from userInfo";
 		
 		
 		
@@ -86,16 +72,55 @@
     <title> 취업 </title>
 
     <!-- Bootstrap -->
-    <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="../Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Dropzone.js -->
-    <link href="./Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
+    <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
+
+	<script>
+		function checkForm(form){
+			
+			// 상단 선택버튼 클릭시 체크된 Row의 값을 가져온다.
+			
+			var tdArr = new Array();
+			var checkbox = $("input[name=user_CheckBox]:checked");
+			
+			// 체크된 체크박스 값을 가져온다
+			checkbox.each(function(i) {
+
+				// checkbox.parent() : checkbox의 부모는 <td>이다.
+				// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				
+				
+				// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+				var userid = td.eq(1).text().trim();
+				
+				// 가져온 값을 배열에 담는다.
+				tdArr.push(userid);
+			});
+			
+			/* $("#user").html(tdArr); */		/* div */
+			$('#user').val(tdArr);			/* input */
+			
+			// alert(tdArr);
+			form.submit();
+		}
+		
+		
+	</script>
+	
+	<script>
+	
+	</script>
+
 </head>
 
 <body class="nav-md">
@@ -103,7 +128,7 @@
 	<div class="container body">
       <div class="main_container">
 
-		<!-- 사이드바 -->
+		<!-- side -->
 		<jsp:include page="sidebar.jsp" flush="false"/>
 
         <!-- top navigation -->
@@ -115,7 +140,7 @@
             <div class="page-title">
               <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <form name="Search" action="PassList_copy.jsp" method="post">
+                  <form name="Search" action="UserList.jsp" method="post">
                   <div class="input-group">
                     <input type="text" name="search_Input" class="form-control" placeholder="기업명 검색">
                     <span class="input-group-btn">
@@ -129,11 +154,11 @@
 
             <div class="clearfix"></div>
 
-            <!----------------------- 양식 삽입 ---------------------------------->		<!-- 그룹사, 제목, 지원분야 -->
+            <!----------------------- 양식 삽입 ---------------------------------->		
         	<div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>합격 자소서 <small>상위 10대 기업</small></h2>
+                    <h2>회원관리 <small>회원 정보</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -155,54 +180,80 @@
                     <div id="datatable-fixed-header_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                     <div class="row">
                     <div class="col-sm-12">
+                      <!-- document.getElementById("ex3_Result1").innerTEXT -->
+                      
+                      <form name = "UserList" action="UserDelete.jsp" method="post">
 	                    <table id="datatable-fixed-header" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable-fixed-header_info">
 	            		<center>
 	                    <thead>
 	                        <tr role="row">
 	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" >..</th>
-	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 189px;">기업명</th>
-	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 310px;">연도</th>
-	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">분야</th>
+	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 189px;">아이디</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 310px;">학과명</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">학점</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">토익</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">토스</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">오픽</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">수상</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">인턴</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">해외</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">봉사</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">자격증</th>
 	                        </tr>
 	                   	</thead>
-	
+						
 	                      	<tbody>	        
 		                      	<% 
 							        while(rs1.next()) {
-							        	int gno = rs1.getInt("pass_gno");
-										String company = rs1.getString("pass_company");
-										String dept = rs1.getString("pass_dept");
-										int year = rs1.getInt("pass_year");
-								%>                   
-	                      	<tr role="row" class="even">			<!-- gno같을경우 하나만 나오게 만들기 -->
-	                      	  <td><input type="checkbox" name="toss_Value" value="L1"></td>
-	                          <td class="sorting_1"> <%=company %> </td>
-	                          <td>	<!------- page, 목록 번호(pass_num), encoded_key(fhrmdls) ------->
-	                          		<a href = "PassContent_copy.jsp?CurrenktPage=<%=CurrentPage%>&search_Input=<%=encoded_search %>&company=<%=company%>&dept=<%=dept%>&gno=<%=gno%>&year=<%=year%>">
-	                          			<%=year%>년도 합격자소서
-	                          		</a>
-		                           <%-- <A HREF="BoardContent.jsp?column=<%=column%>&key=<%=encoded_key%>&CurrentPage=<%=CurrentPage %>">
-		                           <%=year%>년도 합격자소서
-		                           </A>  --%>
- 	                          </td>
-	                          <td> <%=dept %> </td>   
+							        	
+							        	String userId = rs1.getString("userId");
+							        	String userDept = rs1.getString("userDept");
+							        	Float userScore = rs1.getFloat("userScore");
+							        	int userToeic = rs1.getInt("userToeic");
+							        	String userToss = rs1.getString("userToss");
+							        	String userOpic = rs1.getString("userOpic");
+							        	int userAwards = rs1.getInt("userAwards");
+							        	int userIntern = rs1.getInt("userIntern");
+							        	int userOverseas = rs1.getInt("userOverseas");
+							        	int userVolunteer = rs1.getInt("userVolunteer");
+							        	String userCertificate = rs1.getString("userCertificate");
+							        	
+								%>
+							              
+	                      	<tr role="row" class="even">
+	                          <td><input type="checkbox" name="user_CheckBox"></td>			
+	                          <td class="sorting_1"> <%=userId %> </td>
+	                          <td>	<%=userDept %>  </td>
+	                          <td>	<%=userScore %>  </td>
+	                          <td>	<%=userToeic %>  </td>
+	                          <td>	<%=userToss %>  </td>
+	                          <td>	<%=userOpic %>  </td>
+	                          <td>	<%=userAwards %>  </td>
+	                          <td>	<%=userIntern %>  </td>
+	                          <td>	<%=userOverseas %>  </td>
+	                          <td>	<%=userVolunteer %>  </td>
+	                          <td> <%=userCertificate %> </td>   
 	                          <% } %>
 	                        </tr>
-	                        </tbody>
-	                        </center>
 	                        
+	                       </tbody>
+	                       </center>
 	                    </table>
+	                    
+	                    <div class="col-lg-12" id="pre_set"  style="display:none"> 
+	                    	<input type="text" id = "user" name = "user" class="form-control" />
+	                    </div> 
+	                  </form>
+	                  
                     </div>
                     </div>
                     	<!-- 페이지 넘버 -->
                     	<div class="row">
                     	<div class="col-sm-7">
-                    	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassInsert.jsp')"> 추가 </button>
-                    	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassModify.jsp')"> 수정 </button>
-                    	<button type="button" class="btn btn-default"> 삭제</button>
+                    	<button type="button" class="btn btn-dark"> 추가 </button>
+                    	<button type="button" class="btn btn-default" onClick="javascript:checkForm(UserList)" id="selectBtn"> 삭제</button>
 	                    	<div class="dataTables_paginate paging_simple_numbers" id="datatable-fixed-header_paginate">
 		                    	<ul class="pagination">
-		                    		
 		                    		<%
 		                    			TotalPage  = (int) Math.ceil( (double)TotalRecord/PageRecord );
 		                    			TotalPageSet = (int) Math.ceil( (double)TotalPage/PageSet );
@@ -210,7 +261,7 @@
 		                    			
 		                    			if( CurrentPageSet > 1) {
 		                    				int BeforePageSetLastPage = PageSet * (CurrentPageSet-1);
-		                    				String retUrl = "PassList_copy.jsp?CurrentPage=" + BeforePageSetLastPage;
+		                    				String retUrl = "UserList.jsp?CurrentPage=" + BeforePageSetLastPage;
 		                    		%>		                    	
 			                    	<li class="paginate_button next" id="datatable-fixed-header_next">
 			                    	<a href=<%=retUrl %> aria-controls="datatable-fixed-header" data-dt-idx="0" tabindex="0">Previous</a>
@@ -239,7 +290,7 @@
 		                    					
 		                    		<%
 		                    				} else {
-		                    					String retUrl = "PassList_copy.jsp?CurrentPage="+i;
+		                    					String retUrl = "UserList.jsp?CurrentPage="+i;
 		                    					%>
 		                    		
 		                    					<!-- 현재 페이지 집합 띄우기 -->
@@ -259,7 +310,7 @@
 				                    	<%
 				                    		if(TotalPageSet > CurrentPageSet) {
 				                    			int NextPageSet = PageSet * CurrentPageSet + 1;
-				                    			String retUrl = "PassList_copy.jsp?CurrentPage=" + NextPageSet;
+				                    			String retUrl = "UserList.jsp?CurrentPage=" + NextPageSet;
 				                		%>
 			                    		<a href=<%=retUrl %> aria-controls="datatable-fixed-header" data-dt-idx="7" tabindex="0">Next</a>
 			                    		<%
@@ -294,18 +345,18 @@
     </div>
 
     <!-- jQuery -->
-    <script src="./Resources/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="../Resources/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="./Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="./Resources/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="../Resources/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="./Resources/vendors/nprogress/nprogress.js"></script>
+    <script src="../Resources/vendors/nprogress/nprogress.js"></script>
     <!-- Dropzone.js -->
-    <script src="./Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <script src="../Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="./Resources/build/js/custom.min.js"></script>
+    <script src="../Resources/build/js/custom.min.js"></script>
 
 <%
 	} catch(SQLException e) {

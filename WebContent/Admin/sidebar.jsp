@@ -36,34 +36,27 @@
 			<div class="menu_section">
                 <h3> 메뉴 </h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i> 합격ing <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="home.jsp">지역 정보</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-edit"></i> 합격 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="tables.jsp"> 합격 자소서 키워드 매칭 </a></li>
                       <li><a href="PassList.jsp"> 합격자소서 </a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-desktop"></i> 자소서 관리 <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-table"></i> 관리 ing <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="MyForm.jsp"> 자소서 작성 </a></li>
-                      
+                      <li><a href="UserList.jsp"> 회원관리 유지보수 (삭제 성공)</a></li>
+                      <li><a href="PassList_copy.jsp"> 합격자소서관리</a></li>
+                      <li><a href="PassInsert.jsp"> 합격자소서입력</a></li>
+                      <li><a href="PassModify.jsp"> 합격자소서수정</a></li>
+                      <li><a href="PassDelete.jsp"> 합격자소서삭제</a></li>
+                      <li><a href="PassDelete.jsp"> 스펙 유지보수 </a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-table"></i> 마이페이지 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="icons.html">icon</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-bar-chart-o"></i> 스펙 <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-bar-chart-o"></i> 스펙ing <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="GraphPageP.jsp"> 스펙 비교 </a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-clone"></i> 자격 정보 <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-clone"></i> 자격 정보ing <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="base.jsp"> 자격증 </a></li>
                     </ul>

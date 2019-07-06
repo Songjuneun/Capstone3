@@ -8,6 +8,32 @@
 	if(session.getAttribute("signedUser") == null) { 
 		response.sendRedirect("logout.jsp");
 	}
+
+	/* 값 가져오기 */
+	String company = request.getParameter("company");
+	int gno = Integer.parseInt(request.getParameter("gno"));
+	int year = Integer.parseInt(request.getParameter("year"));
+	String dept = request.getParameter("dept");
+	
+	/* 수정 내용 불러오기 */
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs1 = null;
+	String query1 = "";
+	
+	try {
+		
+		Class.forName("com.mysql.jdbc.Driver");
+		String jdbcURL = "jdbc:mysql://localhost:3306/capstonedb";
+		String jdbcID = "root";
+		String jdbcPW = "rootpass";
+		
+		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
+		query1 = "select * from infoinfo where pass_company = '" + company + "' and pass_gno = " + gno;
+		
+		stmt = conn.createStatement();
+		rs1 = stmt.executeQuery(query1);
+		
 %>
 
 <html>
@@ -22,16 +48,16 @@
     <title> 취업 </title>
 
     <!-- Bootstrap -->
-    <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="../Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Dropzone.js -->
-    <link href="./Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
+    <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
 
 <!-- 내용추가 -->
 	<script>
@@ -78,9 +104,10 @@
 					"</div>" +
 					"<div class='col-md-9 col-sm-9 col-xs-12 col-md-offset-3'>" +
 				       	"<button  class='btn btn-dark'  onclick='deleteInput();'> 삭제</button>" +
-					"</div>"
-					;}
+					"</div>";
+		}
 		 
+		/* 추가내용 삭제 */
 		function deleteInput() {
 		  if (arrInput.length > 0) { 
 		     arrInput.pop(); 
@@ -88,6 +115,13 @@
 		  }
 		  display(); 
 		}
+		
+		
+		/* 정보전달 */
+		function CheckForm(form) {
+  			form.submit();
+  		}
+		
 	</script>
 
   </head>
@@ -107,7 +141,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3> 입력 </h3>
+                <h3> 수정 </h3>
               </div>
 
               <div class="title_right">
@@ -145,39 +179,51 @@
 				</div>
 				<div class="x_content">
 					<br>
-					<form class="form-horizontal form-label-left">
+					<form class="form-horizontal form-label-left" name = "PassModify" action="PassModifyProc.jsp?gno=<%=gno%>">
+	
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">연도</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-								<input type="text" name = "yearContent" class="form-control" >
+								<input type="text" name = "companyContent" class="form-control" value=<%=year %>>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">기업명</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-								<input type="text" name = "companyContent" class="form-control" >
+								<input type="text" name = "companyContent" class="form-control" value=<%=company %>>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">분야</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-								<input type="text" name="deptContent" class="form-control">
+								<input type="text" name="deptContent" class="form-control" value=<%=dept %>>
 							</div>
 						</div>
+	
+						<%
+							while( rs1.next() ) {
+								String question = rs1.getString("pass_question");
+								String answer = rs1.getString("pass_answer");
+
+						%>
+	
 						<div class="form-group" >
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">질문<span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-							<textarea class="form-control" name = "qContent" rows="2" placeholder="rows=&quot;3&quot;"></textarea>
+							<textarea class="form-control" name = "qContent" rows="2"> <%=question %> </textarea>
 							</div>
 						</div>
 						<div class="form-group" >
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">내용<span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-							<textarea class="form-control" rows="10" name="aContent" placeholder="rows=&quot;10&quot;"></textarea>
+							<textarea class="form-control" rows="10" name="aContent"> <%=answer %> </textarea>
 							</div>
 						</div>
+						
+						
+						<% } %>
 						
 						<div id="here"></div>
 						
@@ -185,7 +231,7 @@
 					
 					<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
 						<button  class="btn btn-default"  onclick="addInput()"> 내용추가 </button>
-						<button  class="btn btn-dark"> 확인 </button>
+						<button  class="btn btn-dark"  onClick="javascript:CheckForm(PassModify)"> 저장 </button>
                     	<button  class="btn btn-dark" onClick="javascript:location.replace('PassList_copy.jsp')"> 취소</button>
 					</div>
 					
@@ -209,17 +255,26 @@
     </div>
 
     <!-- jQuery -->
-    <script src="./Resources/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="../Resources/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="./Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="./Resources/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="../Resources/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="./Resources/vendors/nprogress/nprogress.js"></script>
+    <script src="../Resources/vendors/nprogress/nprogress.js"></script>
     <!-- Dropzone.js -->
-    <script src="./Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <script src="../Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="./Resources/build/js/custom.min.js"></script>
+    <script src="../Resources/build/js/custom.min.js"></script>
+    
+    
+    <%
+	} catch(SQLException e) {
+		e.printStackTrace();
+		out.println("DB Driver Error!");
+	}
+	%>  
+  
   </body>
 </html>

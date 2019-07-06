@@ -56,11 +56,11 @@
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 		
 		if (search_Input.equals("")){
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from passInfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from passInfo";
+			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
+			query2 = "select count(pass_gno) from infoinfo";
 		} else {
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from passInfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from passInfo  where pass_company like '%" + search_Input + "%'";
+			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
+			query2 = "select count(pass_gno) from infoinfo  where pass_company like '%" + search_Input + "%'";
 		}
 		
 		
@@ -86,16 +86,16 @@
     <title> 취업 </title>
 
     <!-- Bootstrap -->
-    <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="../Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Dropzone.js -->
-    <link href="./Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
+    <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -103,7 +103,7 @@
 	<div class="container body">
       <div class="main_container">
 
-		<!-- side-->
+		<!-- 사이드바 -->
 		<jsp:include page="sidebar.jsp" flush="false"/>
 
         <!-- top navigation -->
@@ -115,7 +115,7 @@
             <div class="page-title">
               <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <form name="Search" action="PassList.jsp" method="post">
+                  <form name="Search" action="PassList_copy.jsp" method="post">
                   <div class="input-group">
                     <input type="text" name="search_Input" class="form-control" placeholder="기업명 검색">
                     <span class="input-group-btn">
@@ -159,6 +159,7 @@
 	            		<center>
 	                    <thead>
 	                        <tr role="row">
+	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" >..</th>
 	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 189px;">기업명</th>
 	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 310px;">연도</th>
 	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">분야</th>
@@ -174,9 +175,10 @@
 										int year = rs1.getInt("pass_year");
 								%>                   
 	                      	<tr role="row" class="even">			<!-- gno같을경우 하나만 나오게 만들기 -->
+	                      	  <td><input type="checkbox" name="toss_Value" value="L1"></td>
 	                          <td class="sorting_1"> <%=company %> </td>
 	                          <td>	<!------- page, 목록 번호(pass_num), encoded_key(fhrmdls) ------->
-	                          		<a href = "PassContent.jsp?CurrentPage=<%=CurrentPage%>&search_Input=<%=encoded_search %>&company=<%=company%>&dept=<%=dept%>&gno=<%=gno%>">
+	                          		<a href = "PassContent_copy.jsp?CurrenktPage=<%=CurrentPage%>&search_Input=<%=encoded_search %>&company=<%=company%>&dept=<%=dept%>&gno=<%=gno%>&year=<%=year%>">
 	                          			<%=year%>년도 합격자소서
 	                          		</a>
 		                           <%-- <A HREF="BoardContent.jsp?column=<%=column%>&key=<%=encoded_key%>&CurrentPage=<%=CurrentPage %>">
@@ -195,6 +197,9 @@
                     	<!-- 페이지 넘버 -->
                     	<div class="row">
                     	<div class="col-sm-7">
+                    	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassInsert.jsp')"> 추가 </button>
+                    	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassModify.jsp')"> 수정 </button>
+                    	<button type="button" class="btn btn-default"> 삭제</button>
 	                    	<div class="dataTables_paginate paging_simple_numbers" id="datatable-fixed-header_paginate">
 		                    	<ul class="pagination">
 		                    		
@@ -205,7 +210,7 @@
 		                    			
 		                    			if( CurrentPageSet > 1) {
 		                    				int BeforePageSetLastPage = PageSet * (CurrentPageSet-1);
-		                    				String retUrl = "PassList.jsp?CurrentPage=" + BeforePageSetLastPage;
+		                    				String retUrl = "PassList_copy.jsp?CurrentPage=" + BeforePageSetLastPage;
 		                    		%>		                    	
 			                    	<li class="paginate_button next" id="datatable-fixed-header_next">
 			                    	<a href=<%=retUrl %> aria-controls="datatable-fixed-header" data-dt-idx="0" tabindex="0">Previous</a>
@@ -234,7 +239,7 @@
 		                    					
 		                    		<%
 		                    				} else {
-		                    					String retUrl = "PassList.jsp?CurrentPage="+i;
+		                    					String retUrl = "PassList_copy.jsp?CurrentPage="+i;
 		                    					%>
 		                    		
 		                    					<!-- 현재 페이지 집합 띄우기 -->
@@ -254,7 +259,7 @@
 				                    	<%
 				                    		if(TotalPageSet > CurrentPageSet) {
 				                    			int NextPageSet = PageSet * CurrentPageSet + 1;
-				                    			String retUrl = "PassList.jsp?CurrentPage=" + NextPageSet;
+				                    			String retUrl = "PassList_copy.jsp?CurrentPage=" + NextPageSet;
 				                		%>
 			                    		<a href=<%=retUrl %> aria-controls="datatable-fixed-header" data-dt-idx="7" tabindex="0">Next</a>
 			                    		<%
@@ -289,18 +294,18 @@
     </div>
 
     <!-- jQuery -->
-    <script src="./Resources/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="../Resources/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="./Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script src="./Resources/vendors/fastclick/lib/fastclick.js"></script>
+    <script src="../Resources/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="./Resources/vendors/nprogress/nprogress.js"></script>
+    <script src="../Resources/vendors/nprogress/nprogress.js"></script>
     <!-- Dropzone.js -->
-    <script src="./Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
+    <script src="../Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="./Resources/build/js/custom.min.js"></script>
+    <script src="../Resources/build/js/custom.min.js"></script>
 
 <%
 	} catch(SQLException e) {
