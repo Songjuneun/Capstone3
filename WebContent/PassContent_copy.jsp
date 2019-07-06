@@ -32,7 +32,7 @@
 		String jdbcPW = "rootpass";
 		
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
-		String sql = "select distinct pass_question, pass_answer from passInfo where pass_gno = " + gno + " and pass_company = '" + company + "'";	
+		String sql = "select distinct pass_question, pass_answer from infoinfo where pass_gno = " + gno + " and pass_company = '" + company + "'";	
 		
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(sql);	

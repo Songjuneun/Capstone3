@@ -56,11 +56,11 @@
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 		
 		if (search_Input.equals("")){
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from passInfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from passInfo";
+			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
+			query2 = "select count(pass_gno) from infoinfo";
 		} else {
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from passInfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
-			query2 = "select count(pass_gno) from passInfo  where pass_company like '%" + search_Input + "%'";
+			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
+			query2 = "select count(pass_gno) from infoinfo  where pass_company like '%" + search_Input + "%'";
 		}
 		
 		

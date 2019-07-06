@@ -29,7 +29,7 @@
 		String jdbcPW = "rootpass";
 		
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
-		query1 = "select * from passInfo where pass_company = '" + company + "' and pass_gno = " + gno;
+		query1 = "select * from infoinfo where pass_company = '" + company + "' and pass_gno = " + gno;
 		
 		stmt = conn.createStatement();
 		rs1 = stmt.executeQuery(query1);
@@ -49,7 +49,7 @@
 
     <!-- Bootstrap -->
     <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->f
+    <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
     <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
@@ -104,9 +104,10 @@
 					"</div>" +
 					"<div class='col-md-9 col-sm-9 col-xs-12 col-md-offset-3'>" +
 				       	"<button  class='btn btn-dark'  onclick='deleteInput();'> 삭제</button>" +
-					"</div>"
-					;}
+					"</div>";
+		}
 		 
+		/* 추가내용 삭제 */
 		function deleteInput() {
 		  if (arrInput.length > 0) { 
 		     arrInput.pop(); 
@@ -114,6 +115,13 @@
 		  }
 		  display(); 
 		}
+		
+		
+		/* 정보전달 */
+		function CheckForm(form) {
+  			form.submit();
+  		}
+		
 	</script>
 
   </head>
@@ -171,7 +179,7 @@
 				</div>
 				<div class="x_content">
 					<br>
-					<form class="form-horizontal form-label-left">
+					<form class="form-horizontal form-label-left" name = "PassModify" action="PassModifyProc.jsp?gno=<%=gno%>">
 	
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">연도</label>
@@ -196,6 +204,7 @@
 							while( rs1.next() ) {
 								String question = rs1.getString("pass_question");
 								String answer = rs1.getString("pass_answer");
+
 						%>
 	
 						<div class="form-group" >
@@ -222,7 +231,7 @@
 					
 					<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
 						<button  class="btn btn-default"  onclick="addInput()"> 내용추가 </button>
-						<button  class="btn btn-dark" onClick="javascript:location.repalce('PassModifyProc.jsp')"> 저장 </button>
+						<button  class="btn btn-dark"  onClick="javascript:CheckForm(PassModify)"> 저장 </button>
                     	<button  class="btn btn-dark" onClick="javascript:location.replace('PassList_copy.jsp')"> 취소</button>
 					</div>
 					
