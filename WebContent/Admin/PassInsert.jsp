@@ -35,59 +35,49 @@
 
 <!-- 내용추가 -->
 	<script>
-		var arrInput = new Array(0);
-		var arrInputValue = new Array(0);
-		 
-		function addInput() {
-		  arrInput.push(arrInput.length);
-		  arrInputValue.push("");
-		  display();
-		}
-		 
-		function display() {
-		  document.getElementById('here').innerHTML="";
-		  for (intI=0;intI<arrInput.length;intI++) {
-		    document.getElementById('here').innerHTML+=createInput(arrInput[intI], arrInputValue[intI]);
-		  }
-		}
-		 
-		function saveValue(intId,strValue) {
-		  arrInputValue[intId]=strValue;
-		  	  
-		}  
-		 
-		function createInput(id,value) {
-			
-			var titile;
-			var line;
-			
-			if(id%2 == 0){
-				title = "질문";
-				line = 2;
+		
+	    function add_item(){
+	        // pre_set 에 있는 내용을 읽어와서 처리..
+	        var div = document.createElement('div');
+	        div.innerHTML = document.getElementById('pre_set').innerHTML;
+	        document.getElementById('here').appendChild(div);
+	    }
+		
+	    function remove_item(obj){
+	        // obj.parentNode 를 이용하여 삭제
+	        document.getElementById('here').removeChild(obj.parentNode);
+	    }
+	    
+		/* 정보전달 */
+		function CheckForm(form) {
+			if(!form.yearContent.value) {
+				alert("연도를 입력하세요.");
+				form.yearContent.focus();
+				return true;
 			}
-			else {
-				title = "내용";
-				line = 10;
+			if(!form.companyContent.value) {
+				alert("기업명을 입력하세요.");
+				form.companyContent.focus();
+				return true;
 			}
-			
-			return  "<br><div class='form-group' >" +
-						"<label  class='control-label col-md-3 col-sm-3 col-xs-12'>"+ title + "<span  class='required'>*</span></label>" +
-						"<div class='col-md-9 col-sm-9 col-xs-12'>" +
-							"<textarea class='form-control' rows=" + line + " id='text" + id + "' onChange='javascript:saveValue(" + id + ",this.value)' value='" + value + "'></textarea>" +
-						"</div>" +
-					"</div>" +
-					"<div class='col-md-9 col-sm-9 col-xs-12 col-md-offset-3'>" +
-				       	"<button  class='btn btn-dark'  onclick='deleteInput();'> 삭제</button>" +
-					"</div>"
-					;}
-		 
-		function deleteInput() {
-		  if (arrInput.length > 0) { 
-		     arrInput.pop(); 
-		     arrInputValue.pop();
-		  }
-		  display(); 
-		}
+			if(!form.deptContent.value) {
+				alert("분야를 입력하세요.");
+				form.deptContent.focus();
+				return true;
+			}
+			if(!form.qContent.value) {
+				alert("질문을 입력하세요.");
+				form.qContent.focus();
+				return true;
+			}
+			if(!form.aContent.value) {
+				alert("내용을 입력하세요.");
+				form.aContent.focus();
+				return true;
+			}
+			form.submit();
+  		}
+
 	</script>
 
   </head>
@@ -145,7 +135,26 @@
 				</div>
 				<div class="x_content">
 					<br>
-					<form class="form-horizontal form-label-left">
+					
+					<div id="pre_set" style="display:none">
+							<div class="form-group" >
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">질문<span class="required">*</span>
+								</label>
+								<div class="col-md-9 col-sm-9 col-xs-12">
+								<textarea class="form-control" name = "qContent" rows="2" ></textarea>
+								</div>
+							</div>
+							<div class="form-group" >
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">내용<span class="required">*</span>
+								</label>
+								<div class="col-md-9 col-sm-9 col-xs-12">
+								<textarea class="form-control" rows="10" name="aContent"></textarea>
+								</div>
+							</div>
+							<button  class="btn btn-dark" onClick="remove_item(this)"> 삭제</button>
+						</div>
+					
+					<form class="form-horizontal form-label-left" name = "PassInsert" action = "PassInsertProc.jsp" method="post">
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">연도</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
@@ -168,24 +177,24 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">질문<span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-							<textarea class="form-control" name = "qContent" rows="2" placeholder="rows=&quot;3&quot;"></textarea>
+							<textarea class="form-control" name = "qContent" rows="2" ></textarea>
 							</div>
 						</div>
 						<div class="form-group" >
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">내용<span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-							<textarea class="form-control" rows="10" name="aContent" placeholder="rows=&quot;10&quot;"></textarea>
+							<textarea class="form-control" rows="10" name="aContent"></textarea>
 							</div>
 						</div>
-						
+					
 						<div id="here"></div>
 						
 					</form>
 					
 					<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-						<button  class="btn btn-default"  onclick="addInput()"> 내용추가 </button>
-						<button  class="btn btn-dark"> 확인 </button>
+						<button  class="btn btn-default"  onclick="add_item()"> 내용추가 </button>
+						<button  class="btn btn-dark" onClick="javascript:CheckForm(PassInsert)"> 확인 </button>
                     	<button  class="btn btn-dark" onClick="javascript:location.replace('PassList_copy.jsp')"> 취소</button>
 					</div>
 					

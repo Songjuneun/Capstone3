@@ -87,7 +87,6 @@
 		function checkForm(form){
 			
 			// 상단 선택버튼 클릭시 체크된 Row의 값을 가져온다.
-			
 			var tdArr = new Array();
 			var checkbox = $("input[name=user_CheckBox]:checked");
 			
@@ -113,12 +112,6 @@
 			// alert(tdArr);
 			form.submit();
 		}
-		
-		
-	</script>
-	
-	<script>
-	
 	</script>
 
 </head>

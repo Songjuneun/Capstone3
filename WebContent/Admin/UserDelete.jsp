@@ -49,7 +49,10 @@
 	} catch(SQLException e) {
 		e.printStackTrace();
 		out.println("DB Driver Error!");
-	} 
+	} finally {
+		rs.close();
+		stmt.close();
+	}
 
 
 %>

@@ -41,7 +41,7 @@
 			if( dbUser.equals(id) && dbPass.equals(pw) ) {
 				/* 인증되었음을 세션에 알림 */
 				session.setAttribute("signedUser", id);	
-				redirectURL = "base.jsp";	
+				redirectURL = "home.jsp";	
 			}
 		}
 		

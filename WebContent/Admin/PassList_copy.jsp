@@ -56,7 +56,7 @@
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 		
 		if (search_Input.equals("")){
-			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
+			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo order by pass_gno desc limit " + FirstRecord + ", " + PageRecord;
 			query2 = "select count(pass_gno) from infoinfo";
 		} else {
 			query1 = "select distinct pass_gno, pass_company, pass_dept, pass_year from infoinfo where pass_company like '%" + search_Input + "%'  order by pass_gno asc limit " + FirstRecord + ", " + PageRecord;
@@ -96,6 +96,44 @@
 
     <!-- Custom Theme Style -->
     <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
+
+	<script>
+		function checkForm(form){
+			
+			// 상단 선택버튼 클릭시 체크된 Row의 값을 가져온다.
+			var companyArr = new Array();
+			var gnoArr = new Array();
+			var checkbox = $("input[name=list_CheckBox]:checked");
+			
+			// 체크된 체크박스 값을 가져온다
+			checkbox.each(function(i) {
+
+				// checkbox.parent() : checkbox의 부모는 <td>이다.
+				// checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+				var tr = checkbox.parent().parent().eq(i);
+				var td = tr.children();
+				
+				
+				// td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+				var company_Value = td.eq(1).text().trim();
+				var gno_Value = td.eq(4).text().trim();
+				
+				// 가져온 값을 배열에 담는다.
+				companyArr.push(company_Value);
+				gnoArr.push(gno_Value);
+			});
+			
+			/* $("#user").html(companyArr); */		/* div */
+			$('#list1').val(companyArr);			/* input */
+			$('#list2').val(gnoArr);
+			
+			alert(companyArr);
+			alert(gnoArr);
+			form.submit();
+		}
+	</script>
+
+
 </head>
 
 <body class="nav-md">
@@ -155,14 +193,16 @@
                     <div id="datatable-fixed-header_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                     <div class="row">
                     <div class="col-sm-12">
-	                    <table id="datatable-fixed-header" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable-fixed-header_info">
+                      <form name="PassList" action="PassDelete.jsp" method="post">
+	                    <table id="datatable-fixed-header" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable-fixed-header_info" >
 	            		<center>
 	                    <thead>
 	                        <tr role="row">
-	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" >..</th>
-	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 189px;">기업명</th>
-	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 310px;">연도</th>
-	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 143px;">분야</th>
+	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width:3%;text-align: center;"></th>
+	                        <th class="sorting_asc" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width:15%">기업명</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 35%;">연도</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 20%;">분야</th>
+	                        <th class="sorting" tabindex="0" aria-controls="datatable-fixed-header" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="display:none;" >no</th>
 	                        </tr>
 	                   	</thead>
 	
@@ -175,7 +215,7 @@
 										int year = rs1.getInt("pass_year");
 								%>                   
 	                      	<tr role="row" class="even">			<!-- gno같을경우 하나만 나오게 만들기 -->
-	                      	  <td><input type="checkbox" name="toss_Value" value="L1"></td>
+	                      	  <td  style="text-align: center;"><input type="checkbox" name="list_CheckBox" ></td>
 	                          <td class="sorting_1"> <%=company %> </td>
 	                          <td>	<!------- page, 목록 번호(pass_num), encoded_key(fhrmdls) ------->
 	                          		<a href = "PassContent_copy.jsp?CurrenktPage=<%=CurrentPage%>&search_Input=<%=encoded_search %>&company=<%=company%>&dept=<%=dept%>&gno=<%=gno%>&year=<%=year%>">
@@ -186,20 +226,26 @@
 		                           </A>  --%>
  	                          </td>
 	                          <td> <%=dept %> </td>   
+	                          <td style="display:none;"> <%=gno %> </td> 
 	                          <% } %>
 	                        </tr>
 	                        </tbody>
 	                        </center>
-	                        
 	                    </table>
+	                    
+	                    <div class="col-lg-12" id="pre_set"  style="display:none"> 
+	                    	<input type="text" id = "list1" name = "list1" class="form-control" />
+	                    	<input type="text" id = "list2" name = "list2" class="form-control" />
+	                    </div> 
+	                    
+	                  </form>
                     </div>
                     </div>
                     	<!-- 페이지 넘버 -->
                     	<div class="row">
                     	<div class="col-sm-7">
                     	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassInsert.jsp')"> 추가 </button>
-                    	<button type="button" class="btn btn-dark" onClick="javascript:location.replace('PassModify.jsp')"> 수정 </button>
-                    	<button type="button" class="btn btn-default"> 삭제</button>
+                    	<button type="button" class="btn btn-default" onClick="javascript:checkForm(PassList)"> 삭제</button>
 	                    	<div class="dataTables_paginate paging_simple_numbers" id="datatable-fixed-header_paginate">
 		                    	<ul class="pagination">
 		                    		

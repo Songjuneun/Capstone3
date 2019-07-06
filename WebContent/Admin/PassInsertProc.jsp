@@ -1,116 +1,74 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"    pageEncoding="utf-8"%>
-<%@ page import = "com.oreilly.servlet.MultipartRequest"%>
-<%@ page import = "com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
-<%@ page import="java.util.*" %>
-<%@ page import="java.io.*" %>
-<%@ page import = "java.sql.*" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.net.URLEncoder" %>
 
 <%request.setCharacterEncoding("utf-8"); %>
 
 <%
 
-//---------------파일의 이름과 크기를 위한 변수 선언
-String filename = null;
-int filesize = 0;
-
-//------------------파일 업로드 폴더으 ㅣ생성
-String saveFolder = "upload_files";
-
-//---------------MultipartRequest 클래스 생성자의 파라미터 설정
-ServletContext context = getServletContext();
-String realFolder = context.getRealPath(saveFolder);
-
-int sizeLimit = 10*1024*1024;
-String encType = "utf-8";
-DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
-
-//--------------------------객체선언
-Connection conn = null;
-Statement stmt = null;
-PreparedStatement pstmt = null;
-ResultSet rs = null;
-
-try {
-	
-	//----------------------------JDBC 설정
-	String jdbcUrl = "jdbc:mysql://localhost:3306/jspdb";
-	String jdbcId = "jspuser";
-	String jdbcPw = "jsppass";	
-
-	Class.forName("com.mysql.jdbc.Driver");
-	conn = DriverManager.getConnection(jdbcUrl, jdbcId, jdbcPw);
-
-	//---------------ㅡMultipartRequest 객체 생성(파일 업로드 발생)
-	MultipartRequest multi = new MultipartRequest(request, realFolder, sizeLimit, encType, policy);
-	
-	//-------------업로드되어 서버에 저장된 파일 이름
-	filename = multi.getFilesystemName("filename");
-	
-	//-----------------file 객체의 선언과 파일의 크기 추출
-	if(filename != null) {
-		Enumeration files = multi.getFileNames();
-		String fname = (String)files.nextElement();
-		File file = multi.getFile(fname);
-		filesize = (int)file.length();
+	if(session.getAttribute("signedUser") == null) { 
+		response.sendRedirect("logout.jsp");
 	}
+	
+	//--------------------------전달된 레코드 식별자 추출 (num자동)
+	int year = Integer.parseInt(request.getParameter("yearContent"));
+	String company = request.getParameter("companyContent");
+	String dept = request.getParameter("deptContent");
+	String[] question = request.getParameterValues("qContent");
+	String[] answer = request.getParameterValues("aContent");
+	
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs1 = null;
+	Statement stmt = null;
 		
-	//--------------------------전송된 데이터의 추출
-	String name = multi.getParameter("name");
-	String mail = multi.getParameter("mail");
-	String subject = multi.getParameter("subject");
-	String content = multi.getParameter("content");
-	String pass = multi.getParameter("pass");
+	try {
+			
+			//----------------------------JDBC 설정
+			String jdbcUrl = "jdbc:mysql://localhost:3306/capstonedb";
+			String jdbcId = "root";
+			String jdbcPw = "rootpass";	
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcUrl, jdbcId, jdbcPw);
+		
+			
+			//--------------------------------------- 데이터베이스 갱신
+			String query1 = "select pass_gno from passInfo order by pass_gno desc limit 1;";  
+			
+			stmt = conn.createStatement();
+			rs1 = stmt.executeQuery(query1);
+			
+			int gno = 0;
+			if (rs1.next()){
+				gno = rs1.getInt(1) +1;
+			}
+			
+			
+			for (int i = 0; i < answer.length; i++) {
+				String query2 = "insert into infoinfo(pass_gno, pass_year, pass_company, pass_dept, pass_question, pass_answer) values(?,?,?,?,?,?)";	/* gno 값 정해주기 */
+				pstmt = conn.prepareStatement(query2);
+				
+				pstmt.setInt(1,gno);
+				pstmt.setInt(2,year);
+				pstmt.setString(3,company);
+				pstmt.setString(4,dept);
+				pstmt.setString(5,question[i]);
+				pstmt.setString(6,answer[i]);
+				pstmt.executeUpdate();
+			}
+			
+			//------------------객체의 종료와 페이지 이동
+			rs1.close();
+			pstmt.close();
+			conn.close();
+			
+			
+			String retUrl = "PassList_copy.jsp";
+			response.sendRedirect(retUrl);
+				
+	} catch (SQLException e) {
+		e.printStackTrace();
+		out.println("DB Driver Error!");
+	} 
 
-	//----------------------------새로운 레코드의RcdNo와 GrpNo 생성
-	String Query1 = "SELECT max(RcdNo), max(GrpNo) from board";
-	stmt = conn.createStatement();
-	rs = stmt.executeQuery(Query1);
-	
-	rs.next();
-	
-	int uid = (rs.getInt(1)) + 1;
-	int gid = (rs.getInt(2)) + 1;
-
-	//-------------------------------------------기타 입력 데이터 생성
-	
-	int refer = 0;
-	int level = 0 ;
-	int order = 1;
-	long now = System.currentTimeMillis();
-	
-	//----------------------입력 징의 수행
-	
-	String Query2 = "insert into board values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	pstmt = conn.prepareStatement(Query2);
-	pstmt.setInt(1, uid);
-	pstmt.setInt(2, gid);
-	pstmt.setString(3, name);
-	pstmt.setString(4, mail);
-	pstmt.setString(5, subject);
-	pstmt.setString(6, content);
-	pstmt.setString(7, pass);
-	pstmt.setString(8, filename);
-	pstmt.setInt(9, filesize);
-	pstmt.setLong(10, now);
-	pstmt.setInt(11, refer);
-	pstmt.setInt(12, level);
-	pstmt.setInt(13, order);
-	
-	pstmt.executeUpdate();
-	
-} catch (SQLException e) {
-	
-	out.print(e);
-
-} finally {
-	
-	// 생성된 객체의 제거와 페이지이동
-	
-	rs.close();
-	pstmt.close();
-	conn.close();
-	response.sendRedirect("BoardList.jsp");
-}
 %>
-	
-	

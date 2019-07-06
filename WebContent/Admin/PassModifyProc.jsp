@@ -12,22 +12,18 @@
 	
 	//--------------------------전달된 레코드 식별자 추출 (num자동)
 	int gno = Integer.parseInt(request.getParameter("gno"));
-	int year = Integer.parseInt(request.getParameter("year"));
-	String company = request.getParameter("company");
-	String dept = request.getParameter("dept");
+	int year = Integer.parseInt(request.getParameter("yearContent"));
+	String company = request.getParameter("companyContent");
+	String dept = request.getParameter("deptContent");
 	String[] question = request.getParameterValues("qContent");
 	String[] answer = request.getParameterValues("aContent");
-	
-	for(int i = 0; i < question.length; i++) {
-		System.out.println(question[i]);
-	}
 	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	Statement stmt = null;
 	
-	try {
+try {
 		
 		//----------------------------JDBC 설정
 		String jdbcUrl = "jdbc:mysql://localhost:3306/capstonedb";
@@ -38,10 +34,10 @@
 	
 		
 		//--------------------------------------- 데이터베이스 갱신
-		
 		String query1 = "select pass_num, pass_question from infoinfo where pass_company='" + company + "' and pass_gno = " + gno ;  /* 첫번째부터 rs.next 순차적으로 해서 배열에 들어가있는데 q&a와 같이 짝짝꿍한다  */
-		int cnt = 0;
+		String query3 = "select count(pass_question) from infoinfo where pass_company='" + company + "' and pass_gno = " + gno;	// 새로 추가된 내용이있나 확인하기 위한 카운트
 		
+		int cnt = 0;
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery(query1);
 		
@@ -49,8 +45,6 @@
 		
 			int n = rs.getInt("pass_num");
 			String q = rs.getString("pass_question");
-			System.out.println(n);
-			System.out.println(q);
 			
 			String query2 = "UPDATE infoinfo set pass_gno=?, pass_year=?, pass_company=?, pass_dept=?, pass_question=?, pass_answer=? where pass_num=?";
 			pstmt = conn.prepareStatement(query2);
@@ -61,9 +55,6 @@
 			pstmt.setString(5, question[cnt]);
 			pstmt.setString(6, answer[cnt]);
 			pstmt.setInt(7, n);
-			
-			System.out.println(question[cnt]);
-			
 			pstmt.executeUpdate();
 			cnt++;
 			
@@ -79,8 +70,8 @@
 		response.sendRedirect(retUrl);
 			
 	} catch (SQLException e) {
-		
-		out.println(e);	
-	}
+		e.printStackTrace();
+		out.println("DB Driver Error!");
+	} 
 
 %>
