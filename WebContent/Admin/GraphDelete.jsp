@@ -10,16 +10,8 @@
 		response.sendRedirect("logout.jsp");
 	}  
 	
-	String company_Value = request.getParameter("list1");
-	String gno_Value = request.getParameter("list2");
-	
-	String[] companyArr = company_Value.split(",");
-	String[] gnoArr = gno_Value.split(","); 
-	int[] gno = new int [gnoArr.length];
-	
-	for(int i =0; i < gnoArr.length; i++) {
-		gno[i] = Integer.parseInt(gnoArr[i]);
-	}
+	int num = Integer.parseInt(request.getParameter("num"));
+
 	
  	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -34,26 +26,20 @@
 		String jdbcPw = "rootpass";	
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(jdbcUrl, jdbcId, jdbcPw);
+
+		String query1 = "delete from specinfo where num= '" + num + "'"; //수정 필요
+		pstmt = conn.prepareStatement(query1);
+		pstmt.executeUpdate();
 		
-		/* if (arrInput.length > 0) { 
-		     arrInput.pop(); 
-		     arrInputValue.pop();
-		} */
-		
-		for( int i = 0; i < companyArr.length; i++) {
-			String query1 = "delete from passinfo where pass_company= '" + companyArr[i] + "' and pass_gno = " + gno[i];
-			pstmt = conn.prepareStatement(query1);
-			pstmt.executeUpdate();
-		}
-		
-		String retUrl = "PassList_copy.jsp";
+
+		String retUrl = "GraphPageP.jsp";
 		response.sendRedirect(retUrl); 
 		
 
 	} catch(SQLException e) {
 		e.printStackTrace();
 		out.println("DB Driver Error!");
-	} 
+	}
 
 
 %>

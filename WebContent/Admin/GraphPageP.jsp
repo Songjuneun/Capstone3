@@ -55,16 +55,15 @@
 		try {
 			
 			Class.forName("com.mysql.jdbc.Driver");
-			String jdbcURL = "jdbc:mysql://localhost:3306/ggdb";
-			String jdbcID = "gguser";
-			String jdbcPW = "ggpass";
+			String jdbcURL = "jdbc:mysql://localhost:3306/capstonedb";
+			String jdbcID = "root";
+			String jdbcPW = "rootpass";
 			
 			conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 			
-			String sql = "select num, company, dept, score, toeic, toss, opic, certificate, awards, intern, overseas, volunteer from specinfo where num <10";
+			String sql = "select num, company, dept, score, toeic, toss, opic, certificate, awards, intern, overseas, volunteer from specinfo group by num desc limit 10";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-		
 		
 %>
 
@@ -82,7 +81,7 @@
 	<!-- ChartJS -->
 	<script src="//www.google-analytics.com/analytics.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-	<script src="./Resources/utils.js"></script>
+	<script src="../Resources/utils.js"></script>
 	
 	<style>
 	canvas{
@@ -98,18 +97,26 @@
 	</style>
 
     <!-- Bootstrap -->
-    <link href="./Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- NProgress -->
-    <link href="./Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="../Resources/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- Dropzone.js -->
-    <link href="./Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    <link href="../Resources/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- Custom Theme Style -->
-    <link href="./Resources/build/css/custom.min.css" rel="stylesheet">
+    <link href="../Resources/build/css/custom.min.css" rel="stylesheet">
+    
+    <script>
+	    /* 정보전달 */
+		function CheckForm(form) {
+			form.submit();
+		}
+    </script>
+    
   </head>
 
   <body class="nav-md">
@@ -126,23 +133,18 @@
         <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
-              <div class="title_left">
-                <h3> 합격스펙 </h3>
-              </div>
-
               <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search for...">
                     <span class="input-group-btn">
                       <button class="btn btn-default" type="button">Go!</button>
-                    </span>
+                      <button type="button" class="btn btn-default" onClick="javascript:location.replace('GraphInsert.jsp')"> 추가 </button>
+                    </span> 
                   </div>
                 </div>
               </div>
             </div>
-
-
 
             <div class="clearfix"></div>
 
@@ -187,7 +189,9 @@
                         <div class="x_title">
                             <h2> <%=company %>
                                 <small><%=dept %></small>
-                            </h2>
+                            </h2>&nbsp&nbsp
+                    		<button type="button" class="btn btn-default" onClick="javascript:location.replace('GraphModify.jsp?num=<%=num%>')"> 수정</button>
+                            <button type="button" class="btn btn-dark" onClick="javascript:location.replace('GraphDelete.jsp?num=<%=num%>')"> 삭제 </button>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -251,23 +255,6 @@
 									<%=volunteer%>
 				                ],
 				                fill: false,
-				            }, {
-				                label: '나',
-				                fill: false,
-				                backgroundColor: window.chartColors.blue,
-				                borderColor: window.chartColors.blue,
-				                data: [
-				                	/* randomScalingFactor(), */
-									3.5/4.5 *10,
-									5,
-									0,
-									2,
-									1,
-									2,
-									0,
-									1,
-									0
-				                ],
 				            }]
 				        },
 				        options: {
@@ -402,18 +389,18 @@
 
 
 <!-- jQuery -->
-<script src="./Resources/vendors/jquery/dist/jquery.min.js"></script>
+<script src="../Resources/vendors/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap -->
-<script src="./Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../Resources/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
-<script src="./Resources/vendors/fastclick/lib/fastclick.js"></script>
+<script src="../Resources/vendors/fastclick/lib/fastclick.js"></script>
 <!-- NProgress -->
-<script src="./Resources/vendors/nprogress/nprogress.js"></script>
+<script src="../Resources/vendors/nprogress/nprogress.js"></script>
 <!-- Dropzone.js -->
-<script src="./Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
+<script src="../Resources/vendors/dropzone/dist/min/dropzone.min.js"></script>
 
 <!-- Custom Theme Scripts -->
-<script src="./Resources/build/js/custom.min.js"></script>
+<script src="../Resources/build/js/custom.min.js"></script>
 
 
 <%

@@ -45,7 +45,7 @@
 			
 			
 			for (int i = 0; i < answer.length; i++) {
-				String query2 = "insert into infoinfo(pass_gno, pass_year, pass_company, pass_dept, pass_question, pass_answer) values(?,?,?,?,?,?)";	/* gno 값 정해주기 */
+				String query2 = "insert into passinfo(pass_gno, pass_year, pass_company, pass_dept, pass_question, pass_answer) values(?,?,?,?,?,?)";	/* gno 값 정해주기 */
 				pstmt = conn.prepareStatement(query2);
 				
 				pstmt.setInt(1,gno);

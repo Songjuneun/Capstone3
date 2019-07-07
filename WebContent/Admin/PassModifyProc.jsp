@@ -5,7 +5,6 @@
 <%request.setCharacterEncoding("utf-8"); %>
 
 <%
-
 	if(session.getAttribute("signedUser") == null) { 
 		response.sendRedirect("logout.jsp");
 	}
@@ -34,8 +33,8 @@ try {
 	
 		
 		//--------------------------------------- 데이터베이스 갱신
-		String query1 = "select pass_num, pass_question from infoinfo where pass_company='" + company + "' and pass_gno = " + gno ;  /* 첫번째부터 rs.next 순차적으로 해서 배열에 들어가있는데 q&a와 같이 짝짝꿍한다  */
-		String query3 = "select count(pass_question) from infoinfo where pass_company='" + company + "' and pass_gno = " + gno;	// 새로 추가된 내용이있나 확인하기 위한 카운트
+		String query1 = "select pass_num, pass_question from passinfo where pass_company='" + company + "' and pass_gno = " + gno ;  /* 첫번째부터 rs.next 순차적으로 해서 배열에 들어가있는데 q&a와 같이 짝짝꿍한다  */
+		String query3 = "select count(pass_question) from passinfo where pass_company='" + company + "' and pass_gno = " + gno;	// 새로 추가된 내용이있나 확인하기 위한 카운트
 		
 		int cnt = 0;
 		stmt = conn.createStatement();
@@ -46,7 +45,7 @@ try {
 			int n = rs.getInt("pass_num");
 			String q = rs.getString("pass_question");
 			
-			String query2 = "UPDATE infoinfo set pass_gno=?, pass_year=?, pass_company=?, pass_dept=?, pass_question=?, pass_answer=? where pass_num=?";
+			String query2 = "UPDATE passinfo set pass_gno=?, pass_year=?, pass_company=?, pass_dept=?, pass_question=?, pass_answer=? where pass_num=?";
 			pstmt = conn.prepareStatement(query2);
 			pstmt.setInt(1, gno);
 			pstmt.setInt(2, year);
@@ -73,5 +72,4 @@ try {
 		e.printStackTrace();
 		out.println("DB Driver Error!");
 	} 
-
 %>

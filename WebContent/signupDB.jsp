@@ -33,7 +33,7 @@
 			int intern = Integer.parseInt (request.getParameter("intern_Value") );
 			int overseas = Integer.parseInt( request.getParameter("overseas_Value") );
 			int volunteer = Integer.parseInt( request.getParameter("volunteer_Value") );
-			String certificate =  request.getParameter("certificate_Value") ;
+			int certificate =  Integer.parseInt( request.getParameter("certificate_Value") );
 			
 			
 			//------------------전송된 아이디와 동일한 아이디 추출, 아이디 중복 검사
@@ -72,7 +72,7 @@
 				pstmt.setInt(9, intern);
 				pstmt.setInt(10, overseas);
 				pstmt.setInt(11, volunteer);
-				pstmt.setString(12, certificate);
+				pstmt.setInt(12, certificate);
 				
 				pstmt.executeUpdate();
 				

@@ -15,6 +15,10 @@
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		ResultSet rs2 = null;
+
+		Object obj =session.getAttribute("signedUser");
+		String user = String.valueOf(obj);
 		
 		String num = "";
 		String company = "";
@@ -29,6 +33,17 @@
 		int intern = 0;
 		int overseas = 0;
 		int volunteer = 0;
+		
+		Float userScore = (float)0; 
+		int userToeic = 0;
+		int userToss = 0;
+		int userOpic = 0;
+	
+		int userCertificate = 0;
+		int userAwards = 0;
+		int userIntern = 0;
+		int userOverseas = 0;
+		int userVolunteer = 0;
 		
 		//---------------------- 페이지의 크기와 페이지 집합의 크기 지정
 		int TotalRecord = 0;
@@ -55,16 +70,53 @@
 		try {
 			
 			Class.forName("com.mysql.jdbc.Driver");
-			String jdbcURL = "jdbc:mysql://localhost:3306/ggdb";
-			String jdbcID = "gguser";
-			String jdbcPW = "ggpass";
+			String jdbcURL = "jdbc:mysql://localhost:3306/capstonedb";
+			String jdbcID = "root";
+			String jdbcPW = "rootpass";
 			
 			conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
 			
-			String sql = "select num, company, dept, score, toeic, toss, opic, certificate, awards, intern, overseas, volunteer from specinfo where num <10";
+			String sql = "select num, company, dept, score, toeic, toss, opic, certificate, awards, intern, overseas, volunteer from specinfo group by num desc limit 10";
+			String sql2 = "select * from userinfo where userId = '"+ user + "'";
+			System.out.println(user);
+			stmt = conn.createStatement();
+			rs2 = stmt.executeQuery(sql2);
+			
+			while(rs2.next()) {
+			
+				userScore =  rs2.getFloat("userScore");
+				userToeic = rs2.getInt("userToeic");
+				
+				userToss = Integer.parseInt(rs2.getString("userToss").replaceAll("[^0-9]", ""));
+   				
+				if(rs2.getString("userOpic").equals("AL")){
+   					userOpic = 10;
+   				} else if(rs2.getString("userOpic").equals("IH")){
+   					userOpic = 6/7 * 10;
+   				} else if(rs2.getString("userOpic").equals("IM")){
+   					userOpic = 5/7 * 10;
+   				} else if(rs2.getString("userOpic").equals("IL")){
+   					userOpic = 4/7 * 10;
+   				} else if(rs2.getString("userOpic").equals("NH")){
+   					userOpic = 3/7 * 10;
+   				} else if(rs2.getString("userOpic").equals("NM")){
+   					userOpic = 2/7 * 10;
+   				} else if(rs2.getString("userOpic").equals("NL")){
+   					userOpic = 1/7 * 10;
+   				}
+				
+				userCertificate = rs2.getInt("userCertificate");
+				userAwards = rs2.getInt("userAwards");
+				userIntern = rs2.getInt("userIntern");
+				userOverseas= rs2.getInt("userOverseas");
+				userVolunteer = rs2.getInt("userVolunteer");
+
+   				System.out.println(userScore + " " + userToss + " " + userCertificate );
+			
+			}
+			
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-		
 		
 %>
 
@@ -155,7 +207,6 @@
 	       				score = rs.getFloat("score"); /* /4.5*100 */
 	       				toeic = rs.getInt("toeic");
 	       				toss = Integer.parseInt(rs.getString("toss").replaceAll("[^0-9]", ""));
-	       				opic = 0;
 	       				
 	       				if(rs.getString("opic").equals("AL")){
 	       					opic = 10;
@@ -178,7 +229,6 @@
 	       				intern = rs.getInt("intern");
 	       				overseas = rs.getInt("overseas");
 	       				volunteer = rs.getInt("volunteer");
-	       				System.out.println(num + " " + company + " " + dept + "  " + score + " " + opic + " " + volunteer );
        		%>
 
                 <!-- ------------------------------------양식 삽입------------------------------------------------- -->
@@ -258,15 +308,15 @@
 				                borderColor: window.chartColors.blue,
 				                data: [
 				                	/* randomScalingFactor(), */
-									3.5/4.5 *10,
-									5,
-									0,
-									2,
-									1,
-									2,
-									0,
-									1,
-									0
+									<%=userScore%>/4.5 *10,
+									<%=userToeic%>/990 * 10,
+									<%=userToss%>/7 * 10,
+									<%=userOpic%>/7 * 10,
+									<%=userCertificate%>,
+									<%=userAwards%>,
+									<%=userIntern%>,
+									<%=userOverseas%>,
+									<%=userVolunteer%>
 				                ],
 				            }]
 				        },

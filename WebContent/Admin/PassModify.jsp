@@ -29,7 +29,7 @@
 		String jdbcPW = "rootpass";
 		
 		conn = DriverManager.getConnection(jdbcURL, jdbcID, jdbcPW);
-		query1 = "select * from infoinfo where pass_company = '" + company + "' and pass_gno = " + gno;
+		query1 = "select * from passinfo where pass_company = '" + company + "' and pass_gno = " + gno;
 		
 		stmt = conn.createStatement();
 		rs1 = stmt.executeQuery(query1);
