@@ -55,11 +55,7 @@
                   </li>
                   <li><a><i class="fa fa-table"></i> 마이페이지 <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="UserList.jsp"> 회원관리</a></li>
-                      <li><a href="PassList_copy.jsp"> 합격자소서관리</a></li>
-                      <li><a href="PassInsert.jsp"> 합격자소서입력</a></li>
-                      <li><a href="PassModify.jsp"> 합격자소서수정</a></li>
-                      <li><a href="PassDelete.jsp"> 합격자소서삭제</a></li>
+                      <li><a href="home.jsp"> 마이페이지</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-bar-chart-o"></i> 스펙 <span class="fa fa-chevron-down"></span></a>
