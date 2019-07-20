@@ -10,10 +10,10 @@
 5. ssh로 mysql 연결 https://idchowto.com/?p=34601
 
 - 참고  
-https://webnautes.tistory.com/448
-https://idchowto.com/?p=37468
-https://xbb123.tistory.com/54
-https://jootc.com/p/201806101246
+[바로가기] https://webnautes.tistory.com/448
+[바로가기] https://idchowto.com/?p=37468
+[바로가기] https://xbb123.tistory.com/54
+[바로가기] https://jootc.com/p/201806101246
 https://m.blog.naver.com/PostView.nhn?blogId=islove8587&logNo=220952365548&proxyReferer=https%3A%2F%2Fwww.google.com%2F
 
 - 알림
