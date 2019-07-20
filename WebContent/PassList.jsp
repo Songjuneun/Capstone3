@@ -63,8 +63,6 @@
 			query2 = "select count(pass_gno) from passInfo  where pass_company like '%" + search_Input + "%'";
 		}
 		
-		
-		
 		stmt = conn.createStatement();
 		rs1 = stmt.executeQuery(query1);
 		

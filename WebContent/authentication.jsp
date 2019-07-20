@@ -13,8 +13,10 @@
 	Connection conn = null;
 	Statement stmt = null;
 	Statement stmt2 = null;
+	PreparedStatement pstmt = null;
 	ResultSet rs1 = null;
 	ResultSet rs2 = null;
+	String dbUser = "";
 	
 	try {
 		
@@ -30,40 +32,52 @@
 		String sql = "select userId, userPass from userInfo";
 		String query = "select adminrId, adminPass from adminInfo";
 		
+		String query3 = "delete from idInfo";
+		pstmt = conn.prepareStatement(query3);
+		pstmt.executeUpdate();
+		
 		stmt = conn.createStatement();
 		rs1 = stmt.executeQuery(sql);
 	
 
-		if (rs1.next()) {
-			String dbUser = rs1.getString("userId");
+		while (rs1.next()) {
+			dbUser = rs1.getString("userId");
 			String dbPass = rs1.getString("userPass");
 			
 			if( dbUser.equals(id) && dbPass.equals(pw) ) {
 				/* 인증되었음을 세션에 알림 */
 				session.setAttribute("signedUser", id);	
 				redirectURL = "home.jsp";	
+				
+				String query4 = "insert into idInfo values(?)";	/* gno 값 정해주기 */
+				pstmt = conn.prepareStatement(query4);
+				pstmt.setString(1, dbUser);
+				pstmt.executeUpdate(); 
+				
 			}
 		}
 		
 
 		rs2 = stmt.executeQuery(query);
  		if (rs2.next()) {
-			String dbUser = rs2.getString("adminrId");
-			String dbPass = rs2.getString("adminPass");
+			String dbUser2 = rs2.getString("adminrId");
+			String dbPass2 = rs2.getString("adminPass");
 			
-			if( dbUser.equals(id) && dbPass.equals(pw) ) {
+			if( dbUser2.equals(id) && dbPass2.equals(pw) ) {
 				session.setAttribute("signedUser", id);	
 				redirectURL = "./Admin/base.jsp";	
 				
 			}
 		} 
- 		
+		
+		
 	
 	} catch(SQLException e) {
 		e.printStackTrace();
 		out.println("DB Driver Error!");
 	} finally {
 		stmt.close();
+		pstmt.close();
 		conn.close();
 		rs1.close();
 		rs2.close();
