@@ -6,8 +6,8 @@
 1. VM VirtualBox 설치
 2. [ubuntu 18.0.4 설치](https://webnautes.tistory.com/448)
 3. [ubuntu에 R 설치](https://3months.tistory.com/210)
-4. [ubuntu에 msyql 설치]https://texasroh.blogspot.com/2018/12/1804-mysql-phpmyadmin.html
-5. [ssh로 mysql]https://idchowto.com/?p=34601
+4. [ubuntu에 msyql 설치](https://texasroh.blogspot.com/2018/12/1804-mysql-phpmyadmin.html)
+5. [ssh로 mysql](https://idchowto.com/?p=34601)
 
 - 참고  
 https://webnautes.tistory.com/448
