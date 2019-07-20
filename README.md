@@ -10,12 +10,12 @@
 4. [ubuntu에 msyql 설치](https://texasroh.blogspot.com/2018/12/1804-mysql-phpmyadmin.html)
 5. [ssh로 mysql](https://idchowto.com/?p=34601)
 
-- 참고  
+
+### 알림
+
+## 참고  
 https://webnautes.tistory.com/448
 https://idchowto.com/?p=37468
 https://xbb123.tistory.com/54
 https://jootc.com/p/201806101246
 https://m.blog.naver.com/PostView.nhn?blogId=islove8587&logNo=220952365548&proxyReferer=https%3A%2F%2Fwww.google.com%2F
-
-
-### 알림
