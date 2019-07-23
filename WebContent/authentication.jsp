@@ -32,10 +32,6 @@
 		String sql = "select userId, userPass from userInfo";
 		String query = "select adminrId, adminPass from adminInfo";
 		
-		String query3 = "delete from idInfo";
-		pstmt = conn.prepareStatement(query3);
-		pstmt.executeUpdate();
-		
 		stmt = conn.createStatement();
 		rs1 = stmt.executeQuery(sql);
 	
@@ -49,7 +45,7 @@
 				session.setAttribute("signedUser", id);	
 				redirectURL = "home.jsp";	
 				
-				String query4 = "insert into idInfo values(?)";	/* gno 값 정해주기 */
+				String query4 = "insert into idInfo(userid) values(?)";	/* gno 값 정해주기 */
 				pstmt = conn.prepareStatement(query4);
 				pstmt.setString(1, dbUser);
 				pstmt.executeUpdate(); 
