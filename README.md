@@ -6,7 +6,6 @@
 
 ### 알림
 - login.jsp로 실행시키기
-- 지도 시각화 기능 추후 구현
 
 ## 참고  
 - R studio server에서 mysql 외부접속
